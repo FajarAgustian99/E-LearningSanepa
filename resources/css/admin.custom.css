@@ -1,0 +1,5 @@
+/* resources/css/admin.custom.css */
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(2,6,23,0.12);
+}

@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   Custom Admin Theme
+   ================================ */
+
+/* Smooth transition untuk semua elemen */
+* {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Sidebar */
+.sidebar {
+    @apply bg-gray-900 text-gray-100 min-h-screen;
+}
+
+.sidebar a {
+    @apply block px-3 py-2 rounded-md;
+}
+
+.sidebar a:hover {
+    @apply bg-gray-700;
+}
+
+.sidebar a.active {
+    @apply bg-gray-800 font-semibold;
+}
+
+/* Card Dashboard */
+.card {
+    @apply bg-white p-6 rounded-lg shadow hover:shadow-lg;
+}
+
+/* Button */
+.btn {
+    @apply inline-block px-4 py-2 rounded-md font-medium;
+}
+
+.btn-primary {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.btn-danger {
+    @apply bg-red-500 text-white hover:bg-red-600;
+}
+
+.btn-success {
+    @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+/* ================================
+   Custom Table Style
+   ================================ */
+
+.table-container {
+    @apply overflow-x-auto bg-white rounded-lg shadow;
+}
+
+.table {
+    @apply min-w-full border-collapse;
+}
+
+.table thead {
+    @apply bg-gray-800 text-white;
+}
+
+.table th {
+    @apply px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider;
+}
+
+.table tbody tr {
+    @apply border-b border-gray-200;
+}
+
+.table tbody tr:nth-child(even) {
+    @apply bg-gray-50;
+}
+
+.table td {
+    @apply px-6 py-4 text-sm text-gray-700;
+}
+
+.table tbody tr:hover {
+    @apply bg-gray-100;
+}
+
+/* Action buttons di tabel */
+.table-action {
+    @apply inline-flex space-x-2;
+}
+
+.table-action a,
+.table-action button {
+    @apply px-3 py-1 rounded-md text-xs font-medium;
+}
+
+.table-action .edit {
+    @apply bg-blue-500 text-white hover:bg-blue-600;
+}
+
+.table-action .delete {
+    @apply bg-red-500 text-white hover:bg-red-600;
+}
+
+.table-action .view {
+    @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+.section-title {
+        @apply text-2xl font-semibold text-[#0A1D56] mb-3;
+    }
+    .card {
+        @apply bg-white rounded-xl shadow p-4 border border-gray-200;
+    }
+    .card-title {
+        @apply font-semibold text-lg mb-1;
+    }
+    .card-desc {
+        @apply text-gray-600 text-sm mb-2;
+    }
+    .th {
+        @apply border px-4 py-2 text-left;
+    }
+    .td {
+        @apply border px-4 py-2;
+    }
+    .no-data {
+        @apply text-gray-600 mb-6;
+    }
+
+
+
+/* ===========================================
+   🎨 STYLE TAMBAHAN UNTUK LAYOUT GURU
+   =========================================== */
+
+/* Transisi halus di semua elemen interaktif */
+a, button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Sidebar scrollbar halus */
+aside::-webkit-scrollbar {
+  width: 6px;
+}
+aside::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+/* Warna aktif pada menu sidebar */
+.sidebar-active {
+  background-color: #1E3A8A; /* biru navy */
+  font-weight: 600;
+}
+
+/* Hover sidebar */
+aside a:hover {
+  background-color: #1E3A8A;
+  transform: translateX(3px);
+}
+
+/* Shadow dan transisi smooth */
+.shadow-md {
+  transition: box-shadow 0.2s ease-in-out;
+}
+.shadow-md:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Navbar */
+header {
+  backdrop-filter: blur(8px);
+}
+
+/* Animasi sidebar mobile */
+#mobileSidebar {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Scroll behavior halus */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsif tambahan */
+@media (max-width: 768px) {
+  aside {
+    display: none !important;
+  }
+
+  #mobileSidebar {
+    display: block;
+  }
+
+  header h2 {
+    font-size: 1rem;
+  }
+}
+
+/* Font & warna teks */
+body {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  color: #1F2937; /* gray-800 */
+}
+
+/* Tambahan estetika untuk konten box */
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Tombol umum */
+.btn-primary {
+  background-color: #1E3A8A;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background-color: #1D4ED8;
+}
+
+.btn-danger {
+  background-color: #DC2626;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+}
+
+.btn-danger:hover {
+  background-color: #B91C1C;
+}
+
+a, button, .card {
+  transition: all 0.2s ease-in-out;
+}
+a:hover, button:hover {
+  transform: translateY(-1px);
+}
+

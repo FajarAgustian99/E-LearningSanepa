@@ -1,0 +1,35 @@
+@extends('layouts.teacher')
+@section('title', 'Kelas yang Diampu')
+
+@section('content')
+<div class="space-y-6">
+
+    <h1 class="text-2xl font-bold text-blue-900">📘 Kelas yang Diampu</h1>
+
+    @if ($classes->isEmpty())
+    <div class="bg-white p-6 rounded-lg shadow text-center">
+        <p class="text-gray-600">Anda belum mengampu kelas apa pun saat ini.</p>
+    </div>
+    @else
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach ($classes as $class)
+        <div class="bg-white rounded-xl shadow-md p-5 hover:shadow-lg transition">
+            <h2 class="text-xl font-semibold text-blue-800 mb-2">{{ $class->name }}</h2>
+            <p class="text-gray-500 mb-3">Jumlah Mata Pelajaran: {{ $class->courses->count() }}</p>
+
+            <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                @foreach ($class->courses->take(3) as $course)
+                <li>📚 {{ $course->name }}</li>
+                @endforeach
+            </ul>
+
+            <a href="#" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+                Lihat Detail
+            </a>
+        </div>
+        @endforeach
+    </div>
+    @endif
+
+</div>
+@endsection

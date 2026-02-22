@@ -1,0 +1,11 @@
+/* resources/css/admin.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* custom utilities (minimal) */
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl p-4 shadow-sm;
+  }
+}
