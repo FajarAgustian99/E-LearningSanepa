@@ -61,6 +61,7 @@ class StudentController extends Controller
             'name'     => $request->name,
             'nisn'    => $request->nisn,
             'password' => Hash::make($request->password),
+            'class_id' => $request->class_id,
             'role_id'  => 3,
         ]);
 

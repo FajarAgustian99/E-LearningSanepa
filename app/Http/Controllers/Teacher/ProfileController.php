@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class ProfileController extends Controller
 {
     /**
-     * 📄 Tampilkan halaman profil guru.
+     *  Tampilkan halaman profil guru.
      */
     public function index()
     {
@@ -20,7 +20,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * ✏️ Update data diri guru (tanpa foto).
+     *  Update data diri guru (tanpa foto).
      */
     public function update(Request $request)
     {
@@ -48,7 +48,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * 🖼️ Update foto profil guru.
+     *  Update foto profil guru.
      */
     public function updatePhoto(Request $request)
     {
@@ -76,7 +76,7 @@ class ProfileController extends Controller
 
 
     /**
-     * 🔐 Update password guru.
+     *  Update password guru.
      */
     public function updatePassword(Request $request)
     {
