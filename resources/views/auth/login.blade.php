@@ -1,15 +1,16 @@
 <x-guest-layout>
     <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl mb-4 shadow-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <img src="{{ asset('images/sanepa.png') }}" alt="Logo Sanepa" class="h-10 w-10">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M12 14l9-5-9-5-9 5 9 5z" />
                 <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-            </svg>
+            </svg> -->
         </div>
-        <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Selamat Datang Di E-Learning Sanepa</h1>
+        <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Selamat Datang <br> Di E-Learning <br> SMA NEGERI 1 PABUARAN</h1>
         <p class="mt-2 text-sm text-gray-500">
-            Silakan masuk ke akun <span class="font-semibold text-indigo-600">E-Learning Sanepa</span> Anda.
+            Silakan masuk menggunakan akun <span class="font-semibold text-indigo-600">E-Learning</span> anda
         </p>
     </div>
 
@@ -100,7 +101,7 @@
 
     <div class="mt-8 text-center border-t border-gray-100 pt-6">
         <p class="text-xs text-gray-400">
-            Butuh bantuan akses? <a href="https://www.google.com/url?sa=E&source=gmail&q=https://wa.me/6283168160537" class="text-indigo-500 hover:underline font-medium">Hubungi Admin IT Sanepa</a>
+            Butuh bantuan akses? <a href="https://www.google.com/url?sa=E&source=gmail&q=https://wa.me/6281221775552" class="text-indigo-500 hover:underline font-medium">Hubungi Admin IT Sanepa</a>
         </p>
     </div>
 </x-guest-layout>
