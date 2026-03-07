@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 py-6">
-
     {{-- ================= STATISTIC CARDS ================= --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
 
@@ -41,12 +40,11 @@
     </div>
 
     {{-- ================= CHART SECTION ================= --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
 
         {{-- USER COMPOSITION --}}
         <div
             class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-6 border border-gray-100">
-
             <div class="flex items-center justify-between mb-4">
                 <h4 class="font-semibold text-gray-700 flex items-center gap-2">
                     📊 Komposisi User

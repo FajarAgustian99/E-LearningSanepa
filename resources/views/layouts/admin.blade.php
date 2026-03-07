@@ -187,7 +187,7 @@
 
 
             {{-- MAIN CONTENT --}}
-            <main class="flex-1 p-4 md:p-8 overflow-auto">
+            <main class="flex-1 p-2 md:p-3 overflow-auto">
                 @yield('content')
             </main>
 
@@ -215,7 +215,7 @@
         );
     </script>
 
-    {{-- ================= CHART.JS (WAJIB ADA) ================= --}}
+    {{-- ================= CHART.JS ================= --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     {{-- ================= PAGE SCRIPTS ================= --}}

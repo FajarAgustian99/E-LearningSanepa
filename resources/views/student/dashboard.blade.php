@@ -258,28 +258,5 @@
         </div>
         @endforeach
     </div>
-    <!-- PILIHAN MATA PELAJARAN (CARD MODEL)
-<div class="mt-10">
-    <h3 class="text-xl font-bold text-[#0A1D56] mb-4">🎯 Pilih Mata Pelajaran</h3>
-    @if($availableMapel->count())
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach($availableMapel as $mapel)
-        <a href="{{ route('student.courses.show', $mapel->id) }}"
-            class="bg-white p-5 rounded-xl shadow hover:shadow-lg border border-[#E5E9F2] transition flex flex-col justify-between hover:-translate-y-1">
-            <div class="flex items-center justify-between mb-3">
-                <span class="text-[#3E6D9C] font-semibold">{{ $mapel->title }}</span>
-                <span class="text-2xl">📚</span>
-            </div>
-            <p class="text-gray-500 text-sm line-clamp-3">{{ Str::limit($mapel->description ?? '-', 100) }}</p>
-            <div class="mt-4 text-right">
-                <span class="text-indigo-600 font-semibold hover:underline">Buka</span>
-            </div>
-        </a>
-        @endforeach
-    </div>
-    @else
-    <p class="text-gray-500 text-sm">Belum ada mata pelajaran tersedia untuk dipilih.</p>
-    @endif
-</div> -->
 
     @endsection
