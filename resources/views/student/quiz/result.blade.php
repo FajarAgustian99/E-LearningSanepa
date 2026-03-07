@@ -1,7 +1,7 @@
 @extends('layouts.student')
 
-@section('title', 'Hasil Kuis')
-@section('page-title', 'Hasil Kuis')
+@section('title', 'Hasil Asesmen')
+@section('page-title', 'Hasil Asesmen')
 
 @section('content')
 <div class="container mx-auto px-4 py-10">
@@ -13,14 +13,12 @@
             <h2 class="text-3xl font-bold text-[#0A1D56]">
                 📝 {{ $quiz->title }}
             </h2>
-
-
         </div>
 
         {{-- SCORE --}}
         <div class="bg-green-100 border-l-4 border-green-600 p-4 rounded-lg mb-6">
             <p class="text-xl font-bold text-green-700">
-                🎉 Nilai Anda: <span class="font-extrabold">{{ $submission->score }}</span>
+                🎉 Total Nilai Anda: <span class="font-extrabold">{{ $submission->score }}</span>
             </p>
         </div>
 
@@ -73,17 +71,41 @@
                         {{ $answer->answer_text }}
                     </div>
 
-                    <p class="text-gray-500 text-sm mt-2 italic">
-                        ⏳ Menunggu penilaian guru
-                    </p>
+                    <td class="px-4 py-3">
+                        @php
+                        $hasEssay = $quiz->questions->where('question_type','essay')->count() > 0;
+                        $essayCompleted = !empty($submission->essay_scores) && array_sum($submission->essay_scores) > 0;
+                        @endphp
+
+                        @if($hasEssay)
+                        @if($essayCompleted)
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold">
+                            ✅ Selesai Dinilai
+                        </span>
+                        @else
+                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-semibold">
+                            ⏳ Menunggu penilaian guru
+                        </span>
+                        @endif
+                        @else
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold">
+                            Selesai
+                        </span>
+                        @endif
+                    </td>
                 </div>
                 @endif
 
             </div>
             @endforeach
         </div>
-
+        <div class="mt-6">
+            <a href="{{ route('student.quiz.show', $quiz->id) }}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                ← Kembali ke Daftar Asesmen
+            </a>
+        </div>
     </div>
+
 
 </div>
 @endsection

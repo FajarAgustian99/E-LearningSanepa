@@ -47,7 +47,7 @@ class QuizSubmissionController extends Controller
 
     /**
      * Submit jawaban quiz
-     * ✅ SATU-SATUNYA TEMPAT SIMPAN DATA
+     *  SATU-SATUNYA TEMPAT SIMPAN DATA
      */
     public function submit(Request $request, Quiz $quiz)
     {
@@ -57,7 +57,7 @@ class QuizSubmissionController extends Controller
 
         $user = auth()->user();
 
-        // 🔒 Cegah submit ulang
+        //  Cegah submit ulang
         $existing = QuizSubmission::where('quiz_id', $quiz->id)
             ->where('user_id', $user->id)
             ->where('is_submitted', true)
@@ -93,7 +93,7 @@ class QuizSubmissionController extends Controller
         }
 
         // ==========================
-        // ✅ SIMPAN FINAL KE DB
+        //  SIMPAN FINAL KE DB
         // ==========================
         QuizSubmission::create([
             'quiz_id'        => $quiz->id,
@@ -133,13 +133,13 @@ class QuizSubmissionController extends Controller
             return (object)[
                 'question' => $q,
                 'selected_option' => $normalized,
+                'answer_text' => $raw, // TAMBAHKAN INI
                 'is_correct' =>
                 $q->question_type === 'multiple_choice'
                     ? $normalized === $q->correct_answer
                     : null,
             ];
         });
-
         return view('student.quiz.result', compact('quiz', 'submission', 'answers'));
     }
 

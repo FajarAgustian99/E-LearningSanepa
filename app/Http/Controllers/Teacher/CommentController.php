@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     /**
+     * Menampilkan komentar
+     */
+    public function index()
+    {
+        $comments = Comment::with('user')->latest()->get();
+
+        return view('teacher.comments.index', compact('comments'));
+    }
+
+    /**
      * Simpan komentar + NOTIFIKASI
      */
     public function store(Request $request, Discussion $discussion)
@@ -37,7 +47,7 @@ class CommentController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 🔔 NOTIFIKASI KE GURU PEMBUAT DISKUSI
+        |  NOTIFIKASI KE GURU PEMBUAT DISKUSI
         |--------------------------------------------------------------------------
         */
         if ($discussion->teacher_id !== $authUser->id) {
@@ -50,7 +60,7 @@ class CommentController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 🔔 NOTIFIKASI KE SISWA LAIN DI KELAS 
+        |  NOTIFIKASI KE SISWA LAIN DI KELAS 
         |--------------------------------------------------------------------------
         */
         $students = User::where('class_id', $discussion->class_id)

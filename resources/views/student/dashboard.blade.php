@@ -41,10 +41,24 @@
     </div>
 
     {{-- Riwayat Nilai --}}
+    @php
+    $totalSubmissions = $quizHistory->count() ?? 0;
+
+    $totalScores = 0;
+    foreach($quizHistory as $submission) {
+    $mcScore = $submission->multiple_choice_score ?? 0;
+    $essayScore = !empty($submission->essay_scores) ? array_sum($submission->essay_scores) : 0;
+    $totalScores += $mcScore + $essayScore;
+    }
+    @endphp
+
     <div class="bg-purple-500 text-white p-5 rounded-xl shadow hover:shadow-lg border border-purple-400 transition flex items-center justify-between">
         <div>
             <p class="text-gray-100 text-sm">Riwayat Nilai</p>
-            <p class="text-2xl font-bold">{{ isset($quizHistory) ? $quizHistory->count() : 0 }}</p>
+            <p class="text-2xl font-bold">{{ $totalSubmissions }}</p>
+            @if($totalSubmissions > 0)
+            <p class="text-sm mt-1">Rata-rata Nilai: {{ round($totalScores / $totalSubmissions, 2) }}</p>
+            @endif
         </div>
         <div class="text-3xl">📊</div>
     </div>
@@ -182,23 +196,46 @@
         @endif
     </div>
 
-    {{-- Riwayat Quiz --}}
+    {{-- Riwayat Asesmen --}}
     <div class="bg-white p-6 rounded-xl shadow border border-[#E5E9F2] hover:shadow-md transition">
-        <h3 class="text-lg font-semibold text-[#0A1D56] mb-4 flex items-center gap-2">📊 Riwayat Quiz</h3>
+        <h3 class="text-lg font-semibold text-[#0A1D56] mb-4 flex items-center gap-2">📊 Riwayat Asesmen</h3>
+
         @if($quizHistory->count())
         <ul class="space-y-3">
-            @foreach($quizHistory as $quiz)
+            @foreach($quizHistory as $submission)
             <li class="flex justify-between pb-2 border-b border-gray-200">
-                <span class="font-medium text-gray-700">{{ $quiz->quiz->title }}</span>
-                <span class="text-sm font-semibold text-[#0A1D56]">{{ $quiz->score ?? 'Belum Dinilai' }}</span>
+                {{-- Judul Quiz --}}
+                <span class="font-medium text-gray-700">
+                    {{ $submission->quiz->title ?? 'Quiz Dihapus' }}
+                </span>
+
+                {{-- Total Nilai (MC + Essay jika ada) --}}
+                <span class="text-sm font-semibold text-[#0A1D56]">
+                    @php
+                    $totalScore = 0;
+                    if ($submission && $submission->is_submitted) {
+                    // Gunakan 'score' karena di Controller ini adalah hasil akhir (MC)
+                    // Jika nanti ada penilaian essay, Anda bisa menjumlahkannya di sini
+                    $mcScore = $submission->score ?? 0;
+
+                    // Sementara essay_scores belum ada di DB, kita set 0 atau ambil dari kolom lain jika ada
+                    $essayScore = is_array($submission->essay_scores) ? array_sum($submission->essay_scores) : 0;
+
+                    $totalScore = $mcScore + $essayScore;
+                    }
+                    @endphp
+
+                    {{ ($submission && $submission->is_submitted) ? $totalScore : 'Belum Dinilai' }}
+                </span>
             </li>
             @endforeach
         </ul>
         @else
-        <p class="text-gray-500 text-sm">Belum ada riwayat quiz.</p>
+        <p class="text-gray-500 text-sm">Belum ada riwayat asesmen.</p>
         @endif
-        <a href="{{ route('student.quiz.history') }}" class="text-sm font-semibold text-[#0A1D56] hover:underline">
-            Riwayat Nilai
+
+        <a href="{{ route('student.quiz.history') }}" class="text-sm font-semibold text-[#0A1D56] hover:underline mt-3 block">
+            Lihat Semua Riwayat Nilai
         </a>
     </div>
 </div>

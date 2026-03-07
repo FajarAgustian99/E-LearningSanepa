@@ -121,6 +121,10 @@
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
                 </a>
 
+                <a href="{{ route('teacher.beranda') }}" class="py-2 px-4 rounded hover:bg-blue-800 flex gap-2">
+                    <i data-lucide="globe" class="w-4 h-4"></i> Beranda
+                </a>
+
                 <a href="{{ route('teacher.attendance.index') }}" class="py-2 px-4 rounded hover:bg-blue-800 flex gap-2">
                     <i data-lucide="clock" class="w-4 h-4"></i> Absensi
                 </a>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Hasil Quiz</title>
+    <title>Hasil Asesmen</title>
     <style>
         body {
             font-family: sans-serif;
@@ -31,7 +31,7 @@
 
 <body>
 
-    <h2>Hasil Quiz: {{ $quiz->title }}</h2>
+    <h2>Hasil Asesmen: {{ $quiz->title }}</h2>
 
     <table>
         <thead>

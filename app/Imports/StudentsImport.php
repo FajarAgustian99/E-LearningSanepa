@@ -16,7 +16,6 @@ class StudentsImport implements ToCollection, WithHeadingRow
     {
         foreach ($rows as $row) {
 
-            // Validasi per baris
             $validator = Validator::make($row->toArray(), [
                 'name'  => 'required|string|max:255',
                 'nisn'  => 'required|numeric',
@@ -24,16 +23,14 @@ class StudentsImport implements ToCollection, WithHeadingRow
             ]);
 
             if ($validator->fails()) {
-                continue; // skip baris error, tidak hentikan import
+                continue;
             }
 
-            // Cari kelas
             $class = Classes::where('name', $row['kelas'])->first();
             if (!$class) {
                 continue;
             }
 
-            // Buat / ambil user
             $student = User::firstOrCreate(
                 ['nisn' => $row['nisn']],
                 [
@@ -43,10 +40,9 @@ class StudentsImport implements ToCollection, WithHeadingRow
                 ]
             );
 
-            // Isi pivot class_user
-            $student->classes()->syncWithoutDetaching([
-                $class->id => ['role' => 'student']
-            ]);
+            // 🔥 INI YANG DIPERBAIKI
+            $student->class_id = $class->id;
+            $student->save();
         }
     }
 }

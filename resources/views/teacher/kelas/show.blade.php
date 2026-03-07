@@ -44,13 +44,13 @@
         {{-- Materi --}}
         <a href="{{ route('teacher.materi.index', $class->id) }}"
             class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow">
-            📚 Buat Materi
+            📚 Daftar Materi
         </a>
 
-        {{-- Quiz --}}
+        {{-- Asesmen --}}
         <a href="{{ route('teacher.quiz.create', $class->id) }}"
             class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow flex items-center gap-1">
-            📝 Buat Quiz
+            📝 Buat Asesmen
         </a>
 
         {{-- Absensi --}}
@@ -101,7 +101,7 @@
     {{-- ============================= --}}
     {{-- QUIZ --}}
     {{-- ============================= --}}
-    <h2 class="section-title">Quiz</h2>
+    <h2 class="section-title">Asesmen</h2>
 
     @if($class->quizzes->count())
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -113,7 +113,7 @@
             <p class="text-gray-500 text-sm"><strong>Durasi:</strong> {{ $quiz->duration }} menit</p>
             <p class="text-gray-500 text-sm"><strong>Batas waktu:</strong> {{ $quiz->due_date ?? '-' }}</p>
 
-            <a href="{{ route('teacher.quiz.results', $quiz->id) }}"
+            <a href="{{ route('teacher.quiz.allResults', $quiz->class_id) }}"
                 class="text-blue-600 underline block mt-2">
                 Lihat Hasil
             </a>
@@ -121,7 +121,7 @@
         @endforeach
     </div>
     @else
-    <p class="no-data">Belum ada quiz di kelas ini.</p>
+    <p class="no-data">Belum ada asesmen di kelas ini.</p>
     @endif
 
     {{-- ============================= --}}

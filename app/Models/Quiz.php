@@ -19,7 +19,10 @@ class Quiz extends Model
         'due_date' => 'datetime',
     ];
 
-
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 
     public function class()
     {

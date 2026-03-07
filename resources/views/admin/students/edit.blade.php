@@ -39,9 +39,10 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700">Kelas</label>
                 <select name="class_id" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                    <option value="">Pilih Kelas</option>
                     @foreach($classes as $class)
                     <option value="{{ $class->id }}" {{ $student->class_id == $class->id ? 'selected' : '' }}>
-                        {{ $class->description }}
+                        {{ $class->name }}
                     </option>
                     @endforeach
                 </select>

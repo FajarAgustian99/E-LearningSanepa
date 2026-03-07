@@ -14,6 +14,8 @@
         </div>
     </div>
 
+
+
     {{-- Form komentar --}}
     <div class="bg-white p-6 rounded-xl shadow mb-6">
         <h3 class="text-xl font-semibold mb-4">💬 Tambahkan Komentar</h3>
@@ -23,6 +25,10 @@
             <textarea name="content" rows="4" class="w-full border border-gray-300 rounded-lg p-3" placeholder="Tulis komentar..." required></textarea>
             <button type="submit" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">Kirim Komentar</button>
         </form>
+        <a href="{{ route('teacher.discussions.index') }}"
+            class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg shadow">
+            ⬅️ Kembali
+        </a>
     </div>
 
     {{-- Semua komentar --}}

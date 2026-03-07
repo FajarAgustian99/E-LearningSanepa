@@ -7,14 +7,12 @@ use App\Models\Discussion;
 use App\Models\Classes;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DiscussionController extends Controller
 {
-    /**
-     * Daftar diskusi guru
-     */
     public function index()
     {
         $teacherId = Auth::id();
@@ -28,21 +26,13 @@ class DiscussionController extends Controller
         return view('teacher.discussions.index', compact('discussions'));
     }
 
-    /**
-     * Form buat diskusi baru
-     */
     public function create()
     {
-        $teacherId = Auth::id();
-
-        $classes = Classes::where('teacher_id', $teacherId)->get();
+        $classes = Classes::where('teacher_id', Auth::id())->get();
 
         return view('teacher.discussions.create', compact('classes'));
     }
 
-    /**
-     * Simpan diskusi baru + NOTIFIKASI KE SISWA
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -51,24 +41,21 @@ class DiscussionController extends Controller
             'class_id' => 'required|exists:classes,id',
         ]);
 
-        // 1️⃣ Simpan diskusi
+        // Pastikan kelas milik guru
+        $class = Classes::where('id', $request->class_id)
+            ->where('teacher_id', Auth::id())
+            ->firstOrFail();
+
         $discussion = Discussion::create([
-            'class_id'   => $request->class_id,
+            'class_id'   => $class->id,
             'teacher_id' => Auth::id(),
             'user_id'    => Auth::id(),
             'title'      => $request->title,
             'content'    => $request->content,
         ]);
 
-        // 2️⃣ Ambil SISWA yang join kelas tersebut
-        $students = User::whereHas('joinedClasses', function ($q) use ($request) {
-            $q->where('classes.id', $request->class_id);
-        })->get();
-
-
-
-        // 🔔 Kirim notifikasi ke siswa di kelas tersebut
-        $students = User::where('class_id', $request->class_id)
+        // Ambil siswa di kelas tersebut
+        $students = User::where('class_id', $class->id)
             ->whereHas('role', function ($q) {
                 $q->where('name', 'Siswa');
             })
@@ -84,15 +71,48 @@ class DiscussionController extends Controller
 
         return redirect()
             ->route('teacher.discussions.index')
-            ->with('success', 'Diskusi berhasil dibuat dan notifikasi dikirim ke siswa.');
+            ->with('success', 'Diskusi berhasil dibuat dan notifikasi dikirim.');
     }
 
-    /**
-     * Detail thread diskusi + komentar
-     */
+    public function edit(Discussion $discussion)
+    {
+        if ($discussion->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $classes = Classes::where('teacher_id', Auth::id())->get();
+
+        return view('teacher.discussions.edit', compact('discussion', 'classes'));
+    }
+
+    public function update(Request $request, Discussion $discussion)
+    {
+        if ($discussion->teacher_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title'    => 'required|string|max:255',
+            'content'  => 'required|string',
+            'class_id' => 'required|exists:classes,id',
+        ]);
+
+        $discussion->update([
+            'class_id' => $request->class_id,
+            'title'    => $request->title,
+            'content'  => $request->content,
+        ]);
+
+        return redirect()
+            ->route('teacher.discussions.index')
+            ->with('success', 'Diskusi berhasil diperbarui!');
+    }
+
     public function showThread($classId, $threadId)
     {
-        $class = Classes::findOrFail($classId);
+        $class = Classes::where('id', $classId)
+            ->where('teacher_id', Auth::id())
+            ->firstOrFail();
 
         $discussion = Discussion::with([
             'user',
@@ -105,13 +125,10 @@ class DiscussionController extends Controller
         return view('teacher.discussions.thread', compact('class', 'discussion'));
     }
 
-    /**
-     * Hapus diskusi
-     */
     public function destroy(Discussion $discussion)
     {
         if ($discussion->teacher_id !== Auth::id()) {
-            abort(403, 'Anda tidak memiliki izin.');
+            abort(403);
         }
 
         $discussion->delete();

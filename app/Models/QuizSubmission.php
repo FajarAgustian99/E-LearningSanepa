@@ -16,6 +16,7 @@ class QuizSubmission extends Model
         'user_id',
         'answers',
         'score',
+        'essay_scores',
         'score_correct',
         'score_incorrect',
         'is_submitted',
@@ -26,6 +27,7 @@ class QuizSubmission extends Model
 
     protected $casts = [
         'answers'       => 'array',
+        'essay_scores'  => 'array',
         'is_submitted'  => 'boolean',
         'start_time'    => 'datetime',
         'end_time'      => 'datetime',

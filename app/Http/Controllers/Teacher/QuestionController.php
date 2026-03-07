@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Quiz;
 use App\Models\Question;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
@@ -16,15 +17,31 @@ class QuestionController extends Controller
 
     public function store(Request $request, Quiz $quiz)
     {
+        // Cek apakah ada file dan ukurannya
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            // Maksimal 2MB (2048 KB)
+            if ($file->getSize() > 2 * 1024 * 1024) {
+                return back()->with('error', 'Gagal menyimpan pertanyaan. Ukuran gambar terlalu besar (maks 2MB).');
+            }
+
+            // Bisa juga cek validitas file
+            if (!$file->isValid()) {
+                return back()->with('error', 'Gagal menyimpan pertanyaan. File gambar tidak valid.');
+            }
+        }
+
+        // Aturan validasi
         $rules = [
             'question_text' => 'required|string',
-            'is_essay' => 'required|boolean',
+            'question_type' => 'required|in:multiple_choice,essay',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'score_correct' => 'required|numeric',
             'score_incorrect' => 'required|numeric',
         ];
 
-        if ($request->is_essay == 0) {
-            // Pilihan Ganda
+        if ($request->question_type == 'multiple_choice') {
             $rules = array_merge($rules, [
                 'option_a' => 'required|string',
                 'option_b' => 'required|string',
@@ -36,13 +53,22 @@ class QuestionController extends Controller
 
         $validated = $request->validate($rules);
 
-        // Jika essay
-        if ($request->is_essay == 1) {
+        // Upload gambar jika ada
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('question_images', 'public');
+        }
+
+        // Atur kolom sesuai tipe soal
+        if ($request->question_type == 'essay') {
             $validated['option_a'] = null;
             $validated['option_b'] = null;
             $validated['option_c'] = null;
             $validated['option_d'] = null;
             $validated['correct_answer'] = null;
+            $validated['is_essay'] = 1;
+        } else {
+            $validated['essay_answer'] = null;
+            $validated['is_essay'] = 0;
         }
 
         $validated['quiz_id'] = $quiz->id;
@@ -61,12 +87,14 @@ class QuestionController extends Controller
     {
         $rules = [
             'question_text' => 'required|string',
-            'is_essay' => 'required|boolean',
+            'question_type' => 'required|in:multiple_choice,essay',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'score_correct' => 'required|numeric',
             'score_incorrect' => 'required|numeric',
         ];
 
-        if ($request->is_essay == 0) {
+        // Jika pilihan ganda
+        if ($request->question_type == 'multiple_choice') {
             $rules = array_merge($rules, [
                 'option_a' => 'required|string',
                 'option_b' => 'required|string',
@@ -78,7 +106,20 @@ class QuestionController extends Controller
 
         $validated = $request->validate($rules);
 
-        if ($request->is_essay == 1) {
+        // Upload gambar baru
+        if ($request->hasFile('image')) {
+
+            if ($question->image) {
+                Storage::disk('public')->delete($question->image);
+            }
+
+            $validated['image'] = $request->file('image')
+                ->store('question_images', 'public');
+        }
+
+        // Jika essay
+        if ($request->question_type == 'essay') {
+
             $validated['option_a'] = null;
             $validated['option_b'] = null;
             $validated['option_c'] = null;
@@ -88,13 +129,19 @@ class QuestionController extends Controller
 
         $question->update($validated);
 
-        return redirect()->route('teacher.quiz.show', $quiz->id)
+        return redirect()
+            ->route('teacher.quiz.show', $quiz->id)
             ->with('success', 'Pertanyaan berhasil diperbarui!');
     }
 
     public function destroy(Quiz $quiz, Question $question)
     {
+        if ($question->image) {
+            Storage::disk('public')->delete($question->image);
+        }
+
         $question->delete();
+
         return back()->with('success', 'Pertanyaan berhasil dihapus!');
     }
 }

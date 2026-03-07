@@ -1,7 +1,7 @@
 @extends('layouts.student')
 
-@section('title', 'Detail Quiz')
-@section('page-title', 'Detail Quiz')
+@section('title', 'Detail Asesmen')
+@section('page-title', 'Detail Asesmen')
 
 @section('content')
 <div class="container mx-auto px-4 py-12 min-h-screen">
@@ -10,7 +10,7 @@
     <div class="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-lg border border-gray-200
                 hover:shadow-xl transition-all duration-300">
 
-        {{-- JUDUL QUIZ --}}
+        {{-- JUDUL ASSESMEN --}}
         <h1 class="text-3xl font-extrabold text-[#0A1D56] mb-3 tracking-wide flex items-center gap-2">
             📝 {{ $quiz->title }}
         </h1>
@@ -20,7 +20,7 @@
             {{ $quiz->description ?? '-' }}
         </p>
 
-        {{-- INFO QUIZ --}}
+        {{-- INFO ASSESMEN --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
             <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl">
@@ -37,12 +37,12 @@
 
         </div>
 
-        {{-- STATUS QUIZ --}}
+        {{-- STATUS ASSESMEN --}}
         @if(isset($submission) && $submission)
 
         <div class="mb-6 p-4 bg-green-50 border border-green-300 rounded-xl shadow-sm">
             <p class="text-green-700 font-semibold text-lg">
-                ✔ Kamu sudah mengerjakan quiz ini.
+                ✔ Kamu sudah mengerjakan asesmen ini.
             </p>
         </div>
 
@@ -56,18 +56,22 @@
         @else
 
         <div class="mb-6 p-4 bg-blue-50 border border-blue-300 rounded-xl shadow-sm text-blue-800">
-            Quiz siap dikerjakan. Pastikan memahami materi sebelum memulai.
+            Asesmen siap dikerjakan. Pastikan memahami materi sebelum memulai.
         </div>
 
-        {{-- BUTTON MULAI QUIZ --}}
+        {{-- BUTTON MULAI ASSESMEN --}}
         <a href="{{ route('student.quiz.start', $quiz->id) }}"
             class="inline-block bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md
                    hover:bg-blue-700 hover:shadow-lg transition">
-            🚀 Mulai Mengerjakan Quiz
+            🚀 Mulai Mengerjakan Asesmen
         </a>
 
         @endif
-
+        <div class="mt-6">
+            <a href="{{ route('student.courses.index') }}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                ← Kembali ke Daftar Asesmen
+            </a>
+        </div>
     </div>
 
 </div>

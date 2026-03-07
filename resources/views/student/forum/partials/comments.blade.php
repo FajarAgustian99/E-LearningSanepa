@@ -9,16 +9,33 @@
     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-4">
         <div class="flex items-start gap-3">
 
-            {{-- AVATAR --}}
+            @php
+            $name = $comment->user->name ?? 'Anonim';
+            $initials = collect(explode(' ', $name))
+            ->map(fn($word) => strtoupper(substr($word,0,1)))
+            ->take(2)
+            ->implode('');
+
+            // Cek foto dengan Storage facade
+            $photoPath = $comment->user->photo ? 'profile/' . $comment->user->photo : null;
+            $photoUrl = ($photoPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($photoPath))
+            ? asset('storage/' . $photoPath)
+            : null;
+            @endphp
+
+            @if($photoUrl)
+            <img src="{{ $photoUrl }}" class="w-10 h-10 rounded-full object-cover shadow">
+            @else
             <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow">
-                {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+                {{ $initials }}
             </div>
+            @endif
 
             <div class="flex-1">
                 {{-- HEADER --}}
                 <div class="flex justify-between items-center mb-1">
                     <span class="font-semibold text-gray-800">
-                        {{ $comment->user->name }}
+                        {{ $comment->user->name ?? 'Anonim' }}
                     </span>
 
                     <span class="text-xs text-gray-500">

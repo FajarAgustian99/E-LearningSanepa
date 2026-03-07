@@ -65,11 +65,7 @@ class StudentController extends Controller
             'role_id'  => 3,
         ]);
 
-        if ($request->class_id) {
-            $student->classes()->attach($request->class_id, [
-                'role' => 'student'
-            ]);
-        }
+
 
         return redirect()->route('admin.students.index')
             ->with('success', 'Siswa berhasil ditambahkan');
@@ -101,18 +97,16 @@ class StudentController extends Controller
 
         $student->name = $request->name;
         $student->nisn = $request->nisn;
-        $student->classes()->sync([
-            $request->class_id => ['role' => 'student']
-        ]);
+        $student->class_id = $request->class_id;
 
-        // Hanya update password kalau diisi
         if ($request->filled('password')) {
             $student->password = bcrypt($request->password);
         }
 
         $student->save();
 
-        return redirect()->route('admin.students.index')->with('success', 'Data siswa berhasil diperbarui!');
+        return redirect()->route('admin.students.index')
+            ->with('success', 'Data siswa berhasil diperbarui!');
     }
 
 

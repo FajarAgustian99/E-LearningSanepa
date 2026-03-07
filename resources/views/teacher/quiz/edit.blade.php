@@ -4,16 +4,16 @@
 <div class="max-w-3xl mx-auto mt-8 bg-white shadow-md rounded-xl p-6">
 
     {{-- Judul Halaman --}}
-    <h1 class="text-2xl font-bold text-yellow-700 mb-6">✏️ Edit Quiz</h1>
+    <h1 class="text-2xl font-bold text-yellow-700 mb-6">✏️ Edit Asesmen</h1>
 
-    {{-- Form Update Quiz --}}
+    {{-- Form Update Asesmen --}}
     <form action="{{ route('teacher.quiz.update', $quiz->id) }}" method="POST" class="space-y-5">
         @csrf
         @method('PUT')
 
-        {{-- Input Judul Quiz --}}
+        {{-- Input Judul Asesmen --}}
         <div>
-            <label class="block font-semibold mb-1 text-gray-700">Judul Quiz</label>
+            <label class="block font-semibold mb-1 text-gray-700">Judul Asesmen</label>
             <input
                 type="text"
                 name="title"
@@ -21,10 +21,10 @@
                 required
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 
                        focus:ring-2 focus:ring-yellow-500 focus:outline-none"
-                placeholder="Masukkan judul quiz">
+                placeholder="Masukkan judul asesmen">
         </div>
 
-        {{-- Input Deskripsi Quiz --}}
+        {{-- Input Deskripsi Asesmen --}}
         <div>
             <label class="block font-semibold mb-1 text-gray-700">Deskripsi</label>
             <textarea
@@ -32,7 +32,7 @@
                 rows="3"
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 
                        focus:ring-2 focus:ring-yellow-500 focus:outline-none"
-                placeholder="Tuliskan deskripsi atau petunjuk quiz">{{ old('description', $quiz->description) }}</textarea>
+                placeholder="Tuliskan deskripsi atau petunjuk asesmen">{{ old('description', $quiz->description) }}</textarea>
         </div>
 
         {{-- Input Batas Waktu --}}
@@ -46,7 +46,7 @@
                        focus:ring-2 focus:ring-yellow-500 focus:outline-none">
         </div>
 
-        {{-- Input Durasi Quiz --}}
+        {{-- Input Durasi Asesmen --}}
         <div>
             <label class="block font-semibold mb-1 text-gray-700">Durasi (menit)</label>
             <input

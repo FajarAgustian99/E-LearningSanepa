@@ -8,8 +8,7 @@
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold">🧑‍🏫 Absensi Guru</h2>
 
-        <a href="{{ route('teacher.attendance.index') }}"
-            class="text-sm text-indigo-600 hover:underline">← Kembali</a>
+
     </div>
 
     @if($alreadySubmitted)
@@ -38,11 +37,17 @@
             @endforeach
         </select>
 
-        <div class="flex justify-end">
+        <div class="flex justify-end gap-3">
+
+            <a href="{{ route('teacher.attendance.index') }}"
+                class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg shadow">← Kembali</a>
+
             <button {{ $alreadySubmitted?'disabled':'' }}
                 class="px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow">
                 💾 Simpan
             </button>
+
+
         </div>
 
     </form>

@@ -12,15 +12,19 @@
     @endif
 
     {{-- Form Tambah Soal --}}
-    <form action="{{ route('teacher.quiz.questions.store', $quiz->id) }}" method="POST">
+    <form action="{{ route('teacher.quiz.questions.store', $quiz->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         {{-- Pilih tipe soal --}}
         <div class="mb-4">
             <label class="block font-medium mb-1">Tipe Soal</label>
-            <select name="is_essay" class="border rounded-md w-full p-2" id="is_essay_select">
-                <option value="0">Pilihan Ganda</option>
-                <option value="1">Essay</option>
+
+            <select name="question_type" id="question_type"
+                class="border rounded-md w-full p-2">
+
+                <option value="multiple_choice">Pilihan Ganda</option>
+                <option value="essay">Essay</option>
+
             </select>
         </div>
 
@@ -30,28 +34,62 @@
             <textarea name="question_text" class="border rounded-md w-full p-2" required></textarea>
         </div>
 
+        {{-- Image --}}
+        <div class="mb-4">
+            <label class="block font-medium mb-1">Gambar (Opsional)</label>
+            <input type="file" name="image" class="border rounded-md w-full p-2">
+        </div>
+
         {{-- Pilihan Ganda --}}
-        <div id="multiple-choice-fields">
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <input type="text" name="option_a" placeholder="Pilihan A" class="border rounded-md p-2">
-                <input type="text" name="option_b" placeholder="Pilihan B" class="border rounded-md p-2">
-                <input type="text" name="option_c" placeholder="Pilihan C" class="border rounded-md p-2">
-                <input type="text" name="option_d" placeholder="Pilihan D" class="border rounded-md p-2">
+        <div id="multiple_choice_fields">
+
+            <div class="mb-4">
+                <label>Option A</label>
+                <input type="text" name="option_a" class="border w-full p-2">
             </div>
 
             <div class="mb-4">
-                <label class="block font-medium mb-1">Jawaban Benar</label>
-                <select name="correct_answer" class="border rounded-md w-full p-2">
-                    <option value="">Pilih Jawaban</option>
+                <label>Option B</label>
+                <input type="text" name="option_b" class="border w-full p-2">
+            </div>
+
+            <div class="mb-4">
+                <label>Option C</label>
+                <input type="text" name="option_c" class="border w-full p-2">
+            </div>
+
+            <div class="mb-4">
+                <label>Option D</label>
+                <input type="text" name="option_d" class="border w-full p-2">
+            </div>
+
+            <div class="mb-4">
+                <label>Jawaban Benar</label>
+
+                <select name="correct_answer" class="border w-full p-2">
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
                     <option value="D">D</option>
                 </select>
             </div>
+
         </div>
 
         {{-- Essay --}}
+
+        <div id="essay_fields" style="display:none">
+
+            <div class="mb-4">
+                <label>Contoh Jawaban (Opsional)</label>
+
+                <textarea name="essay_answer"
+                    class="border rounded-md w-full p-2"
+                    rows="4"></textarea>
+
+            </div>
+
+        </div>
         <div id="essay-field" class="hidden mb-4">
             <label class="block font-medium mb-1">Contoh Jawaban (Opsional)</label>
             <textarea name="essay_answer" class="border rounded-md w-full p-2" placeholder="Tuliskan contoh jawaban..."></textarea>
@@ -71,13 +109,45 @@
 
         <div class="flex items-center justify-between mt-6">
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                💾 Simpan Pertanyaan
+                💾 Simpan
             </button>
-            <a href="{{ route('teacher.quiz.create', $quiz->class_id) }}">Kembali ke Daftar Quiz</a>
-            <a href="{{ route('teacher.quiz.show', $quiz->id) }}" class="text-gray-600 hover:text-gray-800">⬅ Lihat Quiz</a>
+            <a href="{{ route('teacher.quiz.create', $quiz->class_id) }}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">⬅ Kembali</a>
+            <a href="{{ route('teacher.quiz.show', $quiz->id) }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">⬅ Lihat Soal</a>
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const typeSelect = document.getElementById("question_type");
+
+        const mcFields = document.getElementById("multiple_choice_fields");
+
+        const essayFields = document.getElementById("essay_fields");
+
+        function toggleFields() {
+
+            if (typeSelect.value === "essay") {
+
+                mcFields.style.display = "none";
+                essayFields.style.display = "block";
+
+            } else {
+
+                mcFields.style.display = "block";
+                essayFields.style.display = "none";
+
+            }
+
+        }
+
+        typeSelect.addEventListener("change", toggleFields);
+
+        toggleFields();
+
+    });
+</script>
 
 <script>
     const selectType = document.getElementById('is_essay_select');

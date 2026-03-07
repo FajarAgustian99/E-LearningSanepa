@@ -13,6 +13,8 @@ use App\Models\Course;
 use App\Models\Material;
 use App\Models\QuizSubmission;
 use App\Models\Notification;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -123,11 +125,20 @@ class DashboardController extends Controller
         | QUIZ HISTORY
         |--------------------------------------------------------------------------
         */
-        $quizHistory = QuizSubmission::with('quiz')
+        $quizHistory = QuizSubmission::with([
+            'quiz' => function ($q) {
+                $q->with('course', 'questions'); // load kelas dan pertanyaan
+            }
+        ])
             ->where('user_id', $user->id)
-            ->latest()
-            ->take(5)
+            ->orderBy('created_at', 'desc')
             ->get();
+
+        $quizHistory->each(function ($item) {
+            $mcScore = $item->multiple_choice_score ?? 0;
+            $essayScore = array_sum($item->essay_scores ?? []);
+            $item->total_score = $mcScore + $essayScore;
+        });
 
         /*
         |--------------------------------------------------------------------------

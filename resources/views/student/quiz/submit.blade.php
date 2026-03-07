@@ -1,7 +1,7 @@
 @extends('layouts.student')
 
-@section('title', 'Kerjakan Kuis')
-@section('page-title', 'Kerjakan Kuis')
+@section('title', 'Kerjakan Asesmen')
+@section('page-title', 'Kerjakan Asesmen')
 
 @section('content')
 
@@ -83,7 +83,7 @@
         {{-- SUBMIT --}}
         <div class="flex justify-end mt-6">
             <button class="bg-blue-600 text-white px-6 py-3 text-lg rounded-lg shadow hover:bg-blue-700 transition">
-                Kumpulkan Kuis
+                Kumpulkan Asesmen
             </button>
         </div>
     </form>

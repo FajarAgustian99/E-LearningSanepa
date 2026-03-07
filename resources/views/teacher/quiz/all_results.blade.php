@@ -1,39 +1,29 @@
 @extends('layouts.teacher')
 
-@section('title', 'Hasil Asesmen: ' . $quiz->title)
+@section('title', 'Hasil Semua Asesmen - ' . $class->description)
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
 
-    <h1 class="text-3xl font-bold text-[#0A1D56] mb-2">
-        Hasil Asesmen: {{ $quiz->title }}
+    <h1 class="text-3xl font-bold text-[#0A1D56] mb-4">
+        Hasil Semua Asesmen - {{ $class->description }}
     </h1>
 
-    <p class="text-gray-600 mb-6">
-        Daftar siswa dan nilai hasil pengerjaan asesmen.
-    </p>
-
-    <div class="flex gap-2 mb-4">
-        <a href="{{ route('teacher.quiz.export.excel', $quiz->id) }}"
-            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
-            📥 Export Excel
-        </a>
-
-        <a href="{{ route('teacher.quiz.export.pdf', $quiz->id) }}"
-            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm">
-            📄 Export PDF
-        </a>
-
-        {{-- Tombol All Results --}}
-        <a href="{{ route('teacher.quiz.allResults', $quiz->class_id) }}"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-            📊 Lihat Semua Hasil Quiz Kelas
-        </a>
+    {{-- Filter Quiz --}}
+    <div class="flex items-center gap-3 mb-4">
+        <form action="{{ route('teacher.quiz.allResults', $class->id) }}" method="GET" class="flex items-center  gap-2">
+            <label for="quiz_id" class="mr-2 font-medium">Filter Asesmen:</label>
+            <select name="quiz_id" id="quiz_id" class="border rounded px-2 py-1">
+                <option value="">-- Semua Asesmen --</option>
+                @foreach($quizzes as $q)
+                <option value="{{ $q->id }}" {{ request('quiz_id') == $q->id ? 'selected' : '' }}>
+                    {{ $q->title }}
+                </option>
+                @endforeach
+            </select>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">Terapkan</button>
+        </form>
     </div>
-
-    @php
-    $hasEssay = $quiz->questions->where('question_type','essay')->count() > 0;
-    @endphp
 
     <div class="bg-white shadow-md rounded-xl overflow-hidden">
         <table class="w-full text-sm text-left">
@@ -41,27 +31,26 @@
                 <tr>
                     <th class="px-4 py-3">No</th>
                     <th class="px-4 py-3">Nama Siswa</th>
+                    <th class="px-4 py-3">Quiz</th>
                     <th class="px-4 py-3">Total Nilai</th>
                     <th class="px-4 py-3">Status</th>
-                    @if($hasEssay)
                     <th class="px-4 py-3">Aksi</th>
-                    @endif
                 </tr>
             </thead>
 
             <tbody class="divide-y">
-                @forelse ($submissions as $index => $submission)
-                <tr>
-                    <td class="px-4 py-3">{{ $index + 1 }}</td>
-                    <td class="px-4 py-3 font-medium">{{ $submission->user->name }}</td>
+                @php $no = 1; @endphp
 
-                    {{-- Total Nilai: MC + Essay --}}
+                @forelse ($results as $submission)
+                <tr>
+                    <td class="px-4 py-3">{{ $no++ }}</td>
+                    <td class="px-4 py-3 font-medium">{{ $submission->user->name }}</td>
+                    <td class="px-4 py-3 font-semibold">{{ $submission->quiz->title }}</td>
                     <td class="px-4 py-3 font-semibold text-blue-700">
                         {{ ($submission->multiple_choice_score ?? 0) + array_sum($submission->essay_scores ?? []) }}
                     </td>
-
                     <td class="px-4 py-3">
-                        @if($hasEssay)
+                        @if($submission->quiz->questions->where('question_type','essay')->count() > 0)
                         <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-semibold">
                             Essay Perlu Penilaian Manual
                         </span>
@@ -71,20 +60,23 @@
                         </span>
                         @endif
                     </td>
-
-                    @if($hasEssay)
                     <td class="px-4 py-3">
+                        @if($submission->quiz->questions->where('question_type','essay')->count() > 0)
                         <button onclick="openModal('modal{{ $submission->id }}')"
                             class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs">
                             Lihat Essay
                         </button>
+                        @endif
+                        <a href="{{ route('teacher.quiz.results', $submission->quiz->id) }}"
+                            class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1.5 rounded-lg text-xs ml-1">
+                            Detail Quiz
+                        </a>
                     </td>
-                    @endif
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-4 py-6 text-center text-gray-500">
-                        Belum ada siswa yang mengerjakan asesmen ini.
+                    <td colspan="6" class="px-4 py-6 text-center text-gray-500">
+                        Belum ada asesmen atau siswa yang mengerjakan.
                     </td>
                 </tr>
                 @endforelse
@@ -93,37 +85,31 @@
     </div>
 
     <br>
-    <a href="{{ route('teacher.kelas.show', $quiz->class_id) }}"
+    <a href="{{ route('teacher.quiz.results', $submission->quiz->id) }}"
         class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-5 py-2.5 rounded-lg shadow-sm">
         ← Kembali
     </a>
 </div>
 
-{{-- MODAL ESSAY --}}
-@foreach ($submissions as $submission)
-@php
-$answers = $submission->answers ?? [];
-@endphp
-
+{{-- Modal essay --}}
+@foreach ($results as $submission)
+@php $answers = $submission->answers ?? []; @endphp
 <div id="modal{{ $submission->id }}" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-xl shadow-lg w-11/12 max-w-2xl p-6">
-        <form method="POST" action="{{ route('teacher.quiz.gradeEssay', [$quiz->id, $submission->id]) }}">
+        <form method="POST" action="{{ route('teacher.quiz.gradeEssay', [$submission->quiz->id, $submission->id]) }}">
             @csrf
-
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold">Jawaban Essay - {{ $submission->user->name }}</h2>
                 <button type="button" onclick="closeModal('modal{{ $submission->id }}')" class="text-gray-500 hover:text-gray-800 text-xl">✕</button>
             </div>
 
             <div class="space-y-4 max-h-[400px] overflow-y-auto">
-                @foreach($quiz->questions->where('question_type','essay') as $essay)
+                @foreach($submission->quiz->questions->where('question_type','essay') as $essay)
                 <div class="border rounded-lg p-4">
                     <p class="font-semibold text-gray-800">{{ $loop->iteration }}. {!! $essay->question_text !!}</p>
-
                     <div class="mt-2 bg-gray-50 p-3 rounded text-sm text-gray-700">
                         {{ $answers[$essay->id] ?? 'Tidak menjawab' }}
                     </div>
-
                     <div class="mt-3">
                         <label class="text-sm font-medium">Nilai</label>
                         <input type="number" name="essay_scores[{{ $essay->id }}]"
@@ -144,7 +130,6 @@ $answers = $submission->answers ?? [];
 </div>
 @endforeach
 
-{{-- SCRIPT MODAL --}}
 <script>
     function openModal(id) {
         document.getElementById(id).classList.remove('hidden');
@@ -155,5 +140,4 @@ $answers = $submission->answers ?? [];
         document.getElementById(id).classList.add('hidden');
     }
 </script>
-
 @endsection

@@ -28,7 +28,7 @@
                     <img src="{{ asset('images/sanepa.png') }}" alt="Logo Sanepa" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg text-gray-800">E-Learning Sanepa</h1>
+                    <h1 class="font-bold text-lg text-gray-800">E-Learning</h1>
                     <p class="text-[11px] text-gray-600 -mt-1">Sanepa Juara</p>
                 </div>
             </div>

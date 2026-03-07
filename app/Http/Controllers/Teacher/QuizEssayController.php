@@ -65,4 +65,24 @@ class QuizEssayController extends Controller
             ->route('teacher.quiz.essay.index', $quiz->id)
             ->with('success', 'Penilaian berhasil disimpan!');
     }
+
+    public function gradeEssay(Request $request, $quizId, $submissionId)
+    {
+        $submission = QuizSubmission::findOrFail($submissionId);
+
+        $essayScores = $request->essay_scores ?? [];
+
+        $totalEssayScore = array_sum($essayScores);
+
+        $scoreCorrect = $submission->score_correct ?? 0;
+        $scoreIncorrect = $submission->score_incorrect ?? 0;
+
+        $finalScore = ($scoreCorrect - $scoreIncorrect) + $totalEssayScore;
+
+        $submission->update([
+            'score' => $finalScore
+        ]);
+
+        return back()->with('success', 'Nilai essay berhasil disimpan');
+    }
 }

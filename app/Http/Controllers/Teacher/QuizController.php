@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Notification;
 use App\Models\Classes;
 use Carbon\Carbon;
+use App\Models\QuizSubmission;
 
 
 class QuizController extends Controller
@@ -188,5 +189,44 @@ class QuizController extends Controller
         $pdf = Pdf::loadView('teacher.quiz.pdf', compact('quiz'));
 
         return $pdf->download('hasil-quiz-' . $quiz->id . '.pdf');
+    }
+
+    public function gradeEssay(Request $request, $quizId, $submissionId)
+    {
+        $submission = QuizSubmission::findOrFail($submissionId);
+
+        // Validasi input
+        $data = $request->validate([
+            'essay_scores' => 'required|array',
+            'essay_scores.*' => 'nullable|numeric|min:0|max:100',
+        ]);
+
+        // Simpan nilai essay
+        $submission->essay_scores = $data['essay_scores'];
+
+        // Update total score jika ingin menjumlahkan dengan score otomatis
+        $submission->score = $submission->score + array_sum($data['essay_scores']);
+
+        $submission->save();
+
+        return back()->with('success', 'Nilai essay berhasil disimpan!');
+    }
+
+    public function allResults(Request $request, $class_id)
+    {
+        $class = Classes::findOrFail($class_id);
+        $quizzes = Quiz::where('class_id', $class_id)->get();
+
+        $query = QuizSubmission::with(['user', 'quiz']);
+
+        if ($request->quiz_id) {
+            $query->where('quiz_id', $request->quiz_id);
+        } else {
+            $query->whereIn('quiz_id', $quizzes->pluck('id'));
+        }
+
+        $results = $query->get();
+
+        return view('teacher.quiz.all_results', compact('class', 'quizzes', 'results'));
     }
 }

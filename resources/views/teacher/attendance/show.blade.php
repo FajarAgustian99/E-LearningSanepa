@@ -89,11 +89,9 @@
             </tbody>
         </table>
 
-        <div class="mt-6 flex justify-between">
-            <a href="{{ route('teacher.kelas.index') }}"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition">
-                ⬅️ Kembali
-            </a>
+        <div class="mt-6 flex  gap-4">
+            <a href="{{ route('teacher.attendance.index') }}"
+                class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg shadow">← Kembali</a>
 
             <button type="submit"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow"

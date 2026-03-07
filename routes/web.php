@@ -362,9 +362,13 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::get('{quiz}/export-pdf', [QuizController::class, 'exportPdf'])
                     ->name('export.pdf');
+                Route::post('{quiz}/grade-essay/{submission}', [QuizController::class, 'gradeEssay'])
+                    ->name('gradeEssay');
+
 
                 // Questions
                 Route::prefix('{quiz}/questions')->name('questions.')->group(function () {
+
                     Route::get('/create', [QuestionController::class, 'create'])->name('create');
                     Route::post('/store', [QuestionController::class, 'store'])->name('store');
                     Route::get('/{question}/edit', [QuestionController::class, 'edit'])->name('edit');
@@ -383,6 +387,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/', [DiscussionController::class, 'index'])->name('index');
                 Route::get('/create', [DiscussionController::class, 'create'])->name('create');
                 Route::post('/store', [DiscussionController::class, 'store'])->name('store');
+                Route::get('/{discussion}/edit', [DiscussionController::class, 'edit'])->name('edit');
+                Route::put('/{discussion}', [DiscussionController::class, 'update'])->name('update');
                 Route::get('/{class}/{discussion}', [DiscussionController::class, 'showThread'])->name('showThread');
                 Route::delete('/{discussion}', [DiscussionController::class, 'destroy'])->name('destroy');
             });
@@ -400,6 +406,8 @@ Route::middleware(['auth'])->group(function () {
             */
             Route::prefix('quiz')->group(function () {
                 Route::get('/{quiz}/results', [QuizController::class, 'results'])->name('quiz.results');
+                Route::post('/{quiz}/grade-essay/{submission}', [QuizController::class, 'gradeEssay'])->name('quiz.gradeEssay');
+                Route::get('/{quiz}/allresults', [QuizController::class, 'allResults'])->name('quiz.allResults');
             });
 
             Route::prefix('quiz/{quiz}/essay')->name('essay.')->group(function () {
@@ -424,6 +432,9 @@ Route::middleware(['auth'])->group(function () {
             // Dashboard
             Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
             Route::get('/', [StudentDashboardController::class, 'index']);
+            Route::get('/home', [StudentDashboardController::class, 'index'])->name('home');
+            Route::get('/quiz/history', [StudentDashboardController::class, 'quizHistory'])->name('quiz.history');
+            Route::get('/notifications', [StudentDashboardController::class, 'notifications'])->name('notifications');
 
 
             /*

@@ -101,9 +101,9 @@
 
 
 
-    {{-- DAFTAR QUIZ --}}
+    {{-- DAFTAR ASESMEN --}}
     <div class="bg-white rounded-2xl shadow-md border p-8 animate-fadeIn">
-        <h2 class="text-2xl font-bold text-yellow-600 mb-6 flex items-center gap-2">🧠 Daftar Quiz</h2>
+        <h2 class="text-2xl font-bold text-yellow-600 mb-6 flex items-center gap-2">🧠 Daftar Assesmen</h2>
 
         @if($class && $class->quizzes->count())
         <div class="overflow-x-auto rounded-xl border border-gray-200">
@@ -123,7 +123,7 @@
                         <td class="px-5 py-3">
                             <a href="{{ route('student.quiz.show', $q->id) }}"
                                 class="text-blue-600 hover:text-blue-800 font-semibold">
-                                🚀 Kerjakan Quiz
+                                🚀 Kerjakan
                             </a>
                         </td>
                     </tr>

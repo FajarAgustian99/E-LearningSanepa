@@ -11,7 +11,7 @@
             <tr>
                 <th class="px-4 py-2 text-left">Nama Siswa</th>
                 <th class="px-4 py-2 text-left">Materi</th>
-                <th class="px-4 py-2 text-left">Quiz</th>
+                <th class="px-4 py-2 text-left">Asesmen</th>
                 <th class="px-4 py-2 text-left">Kehadiran</th>
             </tr>
         </thead>
